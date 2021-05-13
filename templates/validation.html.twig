@@ -1,0 +1,12 @@
+{# templates/validation.html.twig #}
+{% extends 'societe/layout.html.twig' %}
+{% block content %}
+    <div class="container-fluid">
+        <h3>La société à remonté les erreurs suivantes:</h3>
+        <ul>
+            {% for error in errors %}
+                <li>{{ error.propertyPath }} : {{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

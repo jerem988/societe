@@ -1,0 +1,91 @@
+{# templates/societe/societe.html.twig  #}
+{% extends 'societe/layout.html.twig' %}
+
+{% block title %}Société{% endblock %}
+
+{% block page_contents %}
+    <div class="card text-dark mb-3">
+        <h4 class="card-header py-3">
+            <span onclick="createSociete()" style="font-size: 1.4em; color: #198754;cursor: pointer;">
+              <i class="fas fa-plus-circle"></i>
+            </span>
+            <span class="ms-3" ><u>Liste des sociétés</u></span>
+        </h4>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Num. Siren</th>
+                        <th scope="col">Capital</th>
+                        <th scope="col">Forme Juridique</th>
+                        <th scope="col">Date Immat</th>
+                        <th scope="col">Date Création</th>
+                        <th scope="col">Date Modification</th>
+                        <th scope="col">Historique</th>
+                        <th scope="col">Modifier</th>
+                        <th scope="col">Supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for societe  in listSociete %}
+                            <tr>
+                                <th scope="row">{{ societe.id }}</th>
+                                <td class="text-center">{{ societe.nom }}</td>
+                                <td class="text-center">{{ societe.numeroSiren }}</td>
+                                <td class="text-center">{{ societe.capital }}</td>
+                                <td class="text-center">{{ societe.getFormeJuridique().getLibelle() }}</td>
+                                <td class="text-center">{{ societe.dateImmatriculation.format('d/m/Y') }}</td>
+                                <td class="text-center">{{ societe.createdAt.format('d/m/Y H:i:s') }}</td>
+                                <td class="text-center">{{ societe.updatedAt.format('d/m/Y H:i:s') }}</td>
+                                <td class="text-center">
+                                    <span onclick="historySociete({{ societe.id }})" style="color: #198754;cursor: pointer;">
+                                        <i class="fas fa-history"></i>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span onclick="editSociete({{ societe.id }})" style="color: #ffc107;cursor: pointer;">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span onclick="deleteSociete('{{ societe.id }}', '{{ societe.nom }}')" style="color: #dc3545;cursor: pointer;">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        function historySociete(id) {
+            window.location.href = '{{ path('societe_history', {'id': 'idSociete'}) }}'.replace('idSociete', id);
+        }
+
+        function editSociete(id) {
+            window.location.href = '{{ path('societe_edit', {'id': 'idSociete'}) }}'.replace('idSociete', id);
+        }
+
+        function deleteSociete(id, nom) {
+
+            let message = 'Supprimer l\'ensemble des données de la société ' + nom + ' ? \n\nAttention ! L\'historique de la société sera concervé dans la base mais ne sera plus affichable.';
+            let url = '{{ path('societe_delete', {'id': 'idSociete'}) }}'.replace('idSociete', id);
+            if (confirm(message)) {
+                window.location.href = url;
+            }
+        }
+
+        function createSociete() {
+            window.location.href = "{{ path('societe_add') }}";
+        }
+    </script>
+{% endblock %}

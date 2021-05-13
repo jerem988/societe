@@ -1,0 +1,14 @@
+{# templates/societe/layout.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% block page_contents %}
+        {% endblock %}
+    </div>
+{% endblock %}

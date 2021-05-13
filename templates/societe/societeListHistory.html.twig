@@ -1,0 +1,123 @@
+{# templates/societe/societe.html.twig  #}
+{% extends 'societe/layout.html.twig' %}
+
+{% block title %}Historique de la Société{% endblock %}
+
+{% block page_contents %}
+    <div class="card text-dark mb-3">
+        <h4 class="card-header py-3">
+            <span class="ms-3" ><u>Historique de la société N° {{ id }}</u></span>
+        </h4>
+        <div class="card-body">
+            <div class="form-group mb-1">
+                <label class="col-form-label-sm" for="selectIdDate">Date de saisie:</label>
+                <select onchange="loadData()" id="selectIdDate" class="form-select form-select-sm" readonly="false" required>
+                    <option value="">---</option>
+                    {% for SelectIdDate  in listeSelectIdDate %}
+                        <option value="{{ SelectIdDate.id }}">{{ SelectIdDate.createdAt.format('d/m/Y H:i:s') }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <hr/>
+            <h5 class="mb-4"><u>Information de la société</u></h5>
+            <div class="row">
+                <div class="col-2">
+                    <p>Nom:</p>
+                </div>
+                <div class="col-10">
+                    <span id="nom"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p>Forme Juridique:</p>
+                </div>
+                <div class="col-10">
+                    <span id="forme_juridique"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p>Num Siren:</p>
+                </div>
+                <div class="col-10">
+                    <span id="numero_siren"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p>Date Immat:</p>
+                </div>
+                <div class="col-10">
+                    <span id="date_immatriculation"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p>Capital:</p>
+                </div>
+                <div class="col-10">
+                    <span id="capital"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p>Adresse 1:</p>
+                </div>
+                <div class="col-10">
+                    <span id="adresse1"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <p>Adresse 2:</p>
+                </div>
+                <div class="col-10">
+                    <span id="adresse2"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function loadData() {
+            let id = document.querySelector('#selectIdDate').value;
+            let url = '{{ path('api_societe_trace', {'id': 'idSociete'}) }}'.replace('idSociete', id);
+
+            if (id > 0) {
+                axios.get(url)
+                    .then(function (response) {
+                        let data = response.data;
+
+                        // handle success
+                        if (data) {
+                            document.querySelector('#nom').textContent = data.nom;
+                            document.querySelector('#forme_juridique').textContent = data.formeJuridique.libelle;
+                            document.querySelector('#numero_siren').textContent = data.numeroSiren;
+                            document.querySelector('#date_immatriculation').textContent = data.dateImmatriculationStrFR;
+                            document.querySelector('#capital').textContent = data.capital;
+
+                            //Adresse 1
+                            let adresse1 = data.numero1 + ' ' + data.typeVoie1 + ' ' + data.nomVoie1 +
+                                ', ' + data.cp1 + ', ' + data.ville1;
+                            document.querySelector('#adresse1').textContent = adresse1;
+
+                            //Adresse2
+                            let adresse2 = data.numero2 + ' ' + data.typeVoie2 + ' ' + data.nomVoie2 +
+                                ', ' + data.cp2 + ', ' + data.ville2;
+                            document.querySelector('#adresse2').textContent = adresse2;
+                        }
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+            }
+        }
+    </script>
+{% endblock %}
