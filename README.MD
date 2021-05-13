@@ -16,16 +16,13 @@
 	2 - Renseigner sa configuration, notamment la partie connection à la base de donnée dans le fichier .env ou créér un fichier .env.local pour une configuration 
 	en local.
 	
-	3 - Créér sa base de données en local avec la commande suivante:
-	    
-	    - php bin/console doctrine:database:create
-	
-	4 - Dans un invité de commande se positionner à la racine du projet et lancer les commandes suivantes:
+	3 - Dans un invité de commande se positionner à la racine du projet et lancer les commandes suivantes:
 	
 		- composer install
+		- php bin/console doctrine:database:create (Créér sa base de données en local)
 		- php bin/console doctrine:migrations:migrate
 		- symfony server:start
 
-	5 - L'adresse racine du serveur web s'affiche en vert exemple: "http://127.0.0.1:8000", se rendre à cette adresse
+	4 - L'adresse racine du serveur web s'affiche en vert exemple: "http://127.0.0.1:8000", se rendre à cette adresse
 
 Une fois sur l'application, pour créér une société il faut cliquer sur le boutton "+" en vert.
